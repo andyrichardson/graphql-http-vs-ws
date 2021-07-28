@@ -1,0 +1,27 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "publish": "sls deploy",
+    "build": "microbundle src/handler.ts -f cjs --target node -o dist --external aws-sdk"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.946.0",
+    "microbundle": "^0.13.3",
+    "serverless": "^2.51.2",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "apollo-server-lambda": "^3.0.2",
+    "graphql": "^15.5.1",
+    "graphql-tag": "^2.12.5",
+    "graphql-ws": "^5.3.0",
+    "subscriptionless": "^1.0.0-beta.2"
+  }
+}

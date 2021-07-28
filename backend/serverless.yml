@@ -1,0 +1,99 @@
+service: http-vs-ws
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs14.x
+  httpApi:
+    cors: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: dynamodb:*
+          Resource:
+            - !GetAtt ConnectionsTable.Arn
+            - !GetAtt SubscriptionsTable.Arn
+        - Effect: Allow
+          Action: execute-api:*
+          Resource:
+            - !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebsocketsApi}/*"
+  environment:
+    SUBSCRIPTIONS_TABLE: subscriptionless_subscriptions
+    CONNECTIONS_TABLE: subscriptionless_connections
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  websocket:
+    handler: src/handler.websocket
+    events:
+      - websocket:
+          route: $connect
+      - websocket:
+          route: $disconnect
+      - websocket:
+          route: $default
+
+  http:
+    handler: src/handler.http
+    events:
+      - httpApi:
+          method: POST
+          path: /
+
+resources:
+  Resources:
+    # Table for tracking connections
+    ConnectionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.CONNECTIONS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    # Table for tracking subscriptions
+    SubscriptionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.SUBSCRIPTIONS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: topic
+            AttributeType: S
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: topic
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: ConnectionIndex
+            KeySchema:
+              - AttributeName: connectionId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: TopicIndex
+            KeySchema:
+              - AttributeName: topic
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
