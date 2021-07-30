@@ -29,10 +29,12 @@ Visit frontend deployment at [`http://localhost:8080`](http://localhost:8080) to
 
 ## Results
 
-After running multiple tests, it seems as though there is roughly a 100-150ms latency reduction when using a WebSocket vs HTTP/S.
+### Fast connection (5g)
 
-> Note: This performance gap _may_ be more substantial on slower connections.
+On a fast connection, there is roughly a 100ms reduction in latency when using a WebSocket connection rather than HTTP/S.
 
+<details>
+  <summary>Results</summary>
 
 | protocol  | benchmark  | average latency (ms) |
 | --------- | ---------- | -------------------- |
@@ -41,8 +43,7 @@ After running multiple tests, it seems as though there is roughly a 100-150ms la
 | WebSocket | sequential | 181.18ms             |
 | WebSocket | concurrent | 213.2ms              |
 
-<details>
-  <summary>Screenshot</summary>
+
 
 ![Screenshot from 2021-07-28 12-21-50](https://user-images.githubusercontent.com/10779424/127639670-0f0d707c-1109-46d1-84e5-3b3966c1a5a2.png)
 
@@ -53,7 +54,35 @@ After running multiple tests, it seems as though there is roughly a 100-150ms la
 
 | Down (mbit) | Up (mbit) | Benchmark                                            |
 | ----------- | --------- | ---------------------------------------------------- |
-| 300         | 20        | [link](https://www.speedtest.net/result/11794811311) |
+| 300         | 20        | [link](http://www.dslreports.com/speedtest/69091111) |
+
+</details>
+
+### Slow connection (3g)
+
+On a slow connection, there is a larger 500ms or more reduction in latency when using a WebSocket connection rather than HTTP/S.
+
+<details>
+  <summary>Results</summary>
+
+
+| protocol  | benchmark  | average latency (ms) |
+| --------- | ---------- | -------------------- |
+| HTTPS     | sequential | 1241ms               |
+| HTTPS     | concurrent | 1317.9ms             |
+| WebSocket | sequential | 578.9ms              |
+| WebSocket | concurrent | 644.9ms              |
+
+![Screenshot from 2021-07-30 12-34-45](https://user-images.githubusercontent.com/10779424/127647759-ab5f0e54-6a2f-4e98-8d8d-62a656d3eda2.png)
+
+</details>
+
+<details>
+  <summary>Connection info</summary>
+
+| Down (mbit) | Up (mbit) | Benchmark                                            |
+| ----------- | --------- | ---------------------------------------------------- |
+| 0.4         | 0.03      | [link](http://www.dslreports.com/speedtest/69091033) |
 
 </details>
 
@@ -100,3 +129,9 @@ Expected to introduce less compute-based latency, however a DynamoDB query is ma
 ### API Gateway
 
 It is assumed that API Gateway's handling of HTTP/WebSocket requests is distinct and the means in which integrations to serverless functions take place can vary.
+
+### Network performance
+
+Many factors of a network can influence performance of different connections/protocols. 
+
+For testing purposes the [@sitespeed.io/throttle](https://github.com/sitespeedio/throttle) tool was used to simulate slower connections.
