@@ -29,18 +29,10 @@ Visit frontend deployment at [`http://localhost:8080`](http://localhost:8080) to
 
 ## Results
 
-### "5G" network connection
+After running multiple tests, it seems as though there is roughly a 100-150ms latency reduction when using a WebSocket vs HTTP/S.
 
-<details>
-<summary>Connection info</summary>
+> Note: This performance gap _may_ be more substantial on slower connections.
 
-| Down (mbit) | Up (mbit) | Benchmark                                            |
-| ----------- | --------- | ---------------------------------------------------- |
-| 300         | 15        | [link](https://www.speedtest.net/result/11794811311) |
-
-</details>
-
-#### Results
 
 | protocol  | benchmark  | average latency (ms) |
 | --------- | ---------- | -------------------- |
@@ -49,45 +41,21 @@ Visit frontend deployment at [`http://localhost:8080`](http://localhost:8080) to
 | WebSocket | sequential | 181.18ms             |
 | WebSocket | concurrent | 213.2ms              |
 
-### "4G" network connection
-
 <details>
-<summary>Connection info</summary>
+  <summary>Screenshot</summary>
 
-| Down (mbit) | Up (mbit) | Benchmark                                                |
-| ----------- | --------- | -------------------------------------------------------- |
-| 60          | 8         | [link](https://www.speedtest.net/result/11794830915.png) |
+![Screenshot from 2021-07-28 12-21-50](https://user-images.githubusercontent.com/10779424/127639670-0f0d707c-1109-46d1-84e5-3b3966c1a5a2.png)
 
 </details>
 
-#### Results
-
-| protocol  | benchmark  | average latency (ms) |
-| --------- | ---------- | -------------------- |
-| HTTPS     | sequential | 252.86ms             |
-| HTTPS     | concurrent | 269ms                |
-| WebSocket | sequential | 182.16ms             |
-| WebSocket | concurrent | 227.6ms              |
-
-### "3G" network connection (~3.1mbit down)
-
 <details>
-<summary>Connection info</summary>
+  <summary>Connection info</summary>
 
-| Down (mbit) | Up (mbit) | Benchmark                                                |
-| ----------- | --------- | -------------------------------------------------------- |
-| 7.2         | 2         | [link](https://www.speedtest.net/result/11794850911.png) |
+| Down (mbit) | Up (mbit) | Benchmark                                            |
+| ----------- | --------- | ---------------------------------------------------- |
+| 300         | 20        | [link](https://www.speedtest.net/result/11794811311) |
 
 </details>
-
-#### Results
-
-| protocol  | benchmark  | average latency (ms) |
-| --------- | ---------- | -------------------- |
-| HTTPS     | sequential | 281.76ms             |
-| HTTPS     | concurrent | 277.8ms              |
-| WebSocket | sequential | 174.6ms              |
-| WebSocket | concurrent | 238.9ms              |
 
 ---
 
