@@ -2,7 +2,7 @@
 
 A benchmark comparing performance of GraphQL requests made over HTTP and WebSocket transport protocols on serverless infrastructure.
 
-> Check out the blog post [here]()
+> Check out the blog post [here](https://dev.to/andyrichardsonn/graphql-requests-over-http-s-are-slow-d1p)
 
 ## Usage
 
